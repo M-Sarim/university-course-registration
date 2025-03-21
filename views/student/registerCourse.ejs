@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Register Course</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-color: #0099cc;
+      --secondary-color: #ffcc00;
+      --accent-color: #009966;
+      --dark-blue: #003366;
+      --light-bg: #f8f9fa;
+      --card-bg: #fff;
+      --text-color: #003366;
+      --light-text: #fff;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+      padding: 15px;
+    }
+
+    .navbar {
+      width: 90%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar h1 {
+      font-size: 1.5rem;
+    }
+
+    nav a {
+      color: var(--light-text);
+      text-decoration: none;
+      margin-left: 15px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 4px;
+    }
+
+    nav a:hover {
+      background-color: var(--secondary-color);
+      color: var(--dark-blue);
+    }
+
+    .container {
+      width: 90%;
+      margin: 20px auto;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table thead tr {
+      background-color: var(--secondary-color);
+    }
+
+    table th,
+    table td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .btn {
+      background-color: var(--secondary-color);
+      color: var(--dark-blue);
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #c08900;
+    }
+
+    footer {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+      text-align: center;
+      padding: 15px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="navbar">
+      <h1>Course Management System</h1>
+      <nav>
+        <a href="/student/dashboard">Dashboard</a>
+        <a href="/student/register">Register Course</a>
+        <a href="/student/schedule">Weekly Schedule</a>
+        <a href="/auth/logout">Logout</a>
+      </nav>
+    </div>
+  </header>
+  <div class="container">
+    <div class="card">
+      <h2>Available Courses</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Course Code</th>
+            <th>Title</th>
+            <th>Department</th>
+            <th>Level</th>
+            <th>Time</th>
+            <th>Days</th>
+            <th>Seats</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="availableCourses">
+          <tr>
+            <td colspan="8">Loading courses...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <footer>
+    <p>&copy; 2025 National University of Sciences. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function fetchAvailableCourses() {
+      fetch("/api/courses")
+        .then((res) => res.json())
+        .then((data) => {
+          const courses = data.courses || [];
+          const tbody = document.getElementById("availableCourses");
+          tbody.innerHTML = "";
+          if (courses.length > 0) {
+            courses.forEach((course) => {
+              const tr = document.createElement("tr");
+              tr.innerHTML = `
+                  <td>${course.courseCode}</td>
+                  <td>${course.courseName}</td>
+                  <td>${course.department}</td>
+                  <td>${course.level}</td>
+                  <td>${course.time || "N/A"}</td>
+                  <td>${course.days && course.days.length
+                  ? course.days.join(", ")
+                  : "N/A"
+                }</td>
+                  <td>${course.seats}</td>
+                  <td>
+                    <button class="btn" onclick="registerCourse('${course.courseCode
+                }')">
+                      Register
+                    </button>
+                  </td>
+                `;
+              tbody.appendChild(tr);
+            });
+          } else {
+            tbody.innerHTML = `<tr><td colspan="8">No courses available</td></tr>`;
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching courses:", err);
+          document.getElementById("availableCourses").innerHTML = `
+              <tr>
+                <td colspan="8" style="color:red;">Error loading courses</td>
+              </tr>
+            `;
+        });
+    }
+
+    function registerCourse(courseCode) {
+      fetch("/student/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ courseCode }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            alert(`Registered for course: ${courseCode}`);
+            fetchAvailableCourses();
+          } else {
+            alert(
+              "Registration failed: " + (data.message || "Unknown error")
+            );
+          }
+        })
+        .catch((err) => {
+          console.error("Error during registration:", err);
+          alert("Error during registration. Check console for details.");
+        });
+    }
+
+    fetchAvailableCourses();
+  </script>
+</body>
+
+</html>

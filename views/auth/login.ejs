@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>National University of Sciences - Login</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+
+    :root {
+      --primary-color: #0095B6;
+      --secondary-color: #009644;
+      --accent-color: #FFD700;
+      --light-bg: #f5f9fa;
+      --text-color: #333;
+      --light-text: #fff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+      padding: 20px 0;
+      text-align: center;
+    }
+
+    header img.logo {
+      height: 80px;
+      width: auto;
+    }
+
+    h1.page-title {
+      font-size: 2rem;
+      margin: 20px 0;
+      text-align: center;
+      color: var(--primary-color);
+    }
+
+    footer {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    /* Tabs container */
+    .login-tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .login-tab {
+      flex: 1;
+      max-width: 200px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      background-color: #fff;
+      margin: 0 5px;
+      border-radius: 4px 4px 0 0;
+      font-weight: 600;
+      border: 1px solid #ddd;
+    }
+
+    .login-tab.active {
+      background-color: var(--secondary-color);
+      color: var(--light-text);
+      border-bottom: none;
+    }
+
+    .login-container {
+      max-width: 500px;
+      margin: 0 auto;
+      background-color: var(--light-text);
+      border-radius: 0 4px 4px 4px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      border: 1px solid #ddd;
+      padding: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 0 2px rgba(0, 150, 68, 0.2);
+    }
+
+    .hint {
+      font-size: 14px;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background-color: var(--secondary-color);
+      color: var(--light-text);
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .login-btn:hover {
+      background-color: #007e39;
+      /* Darker green */
+      transform: translateY(-2px);
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+      color: var(--secondary-color);
+    }
+
+    .login-form {
+      display: none;
+    }
+
+    .login-form.active {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <img src="/images/logo.png" alt="National University of Sciences Logo" class="logo" />
+    </div>
+  </header>
+  <div class="container">
+    <h1 class="page-title">Login Portal</h1>
+
+    <div class="login-tabs">
+      <div class="login-tab active" id="studentTab">Student Login</div>
+      <div class="login-tab" id="adminTab">Admin Login</div>
+    </div>
+
+    <div class="login-container">
+      <form id="studentForm" class="login-form active" action="/auth/login" method="POST">
+        <input type="hidden" name="role" value="student" />
+        <div class="form-group">
+          <label for="studentUsername">Roll Number</label>
+          <input type="text" id="studentUsername" name="username" required autofocus />
+          <div class="hint">Enter your roll number (e.g., 22F-XXXX)</div>
+        </div>
+        <button type="submit" class="login-btn">Login</button>
+      </form>
+
+      <form id="adminForm" class="login-form" action="/auth/login" method="POST">
+        <input type="hidden" name="role" value="admin" />
+        <div class="form-group">
+          <label for="adminUsername">Username</label>
+          <input type="text" id="adminUsername" name="username" placeholder="Enter your username">
+        </div>
+        <div class="form-group">
+          <label for="adminPassword">Password</label>
+          <input type="password" id="adminPassword" name="password" placeholder="Enter your password" />
+        </div>
+        <button type="submit" class="login-btn">Login</button>
+      </form>
+
+      <a href="/" class="back-link">Back to Home</a>
+    </div>
+  </div>
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 National University of Sciences. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const studentTab = document.getElementById("studentTab");
+    const adminTab = document.getElementById("adminTab");
+    const studentForm = document.getElementById("studentForm");
+    const adminForm = document.getElementById("adminForm");
+
+    studentTab.addEventListener("click", () => {
+      studentTab.classList.add("active");
+      adminTab.classList.remove("active");
+      studentForm.classList.add("active");
+      adminForm.classList.remove("active");
+    });
+
+    adminTab.addEventListener("click", () => {
+      adminTab.classList.add("active");
+      studentTab.classList.remove("active");
+      adminForm.classList.add("active");
+      studentForm.classList.remove("active");
+    });
+  </script>
+</body>
+
+</html>

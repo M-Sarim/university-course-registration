@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-color: #0099cc;
+      --secondary-color: #ffcc00;
+      --accent-color: #009966;
+      --dark-blue: #003366;
+      --light-bg: #f8f9fa;
+      --card-bg: #fff;
+      --text-color: #003366;
+      --light-text: #fff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+      padding: 20px 0;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1,
+    h2 {
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: var(--dark-blue);
+    }
+
+    a.button {
+      background-color: var(--secondary-color);
+      color: var(--dark-blue);
+      padding: 8px 16px;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 600;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      display: inline-block;
+    }
+
+    a.button:hover {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+
+    li {
+      background-color: var(--card-bg);
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px 15px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    li span {
+      flex: 1;
+    }
+
+    form {
+      background-color: var(--card-bg);
+      padding: 20px;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    form label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: var(--dark-blue);
+    }
+
+    form input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    form button {
+      background-color: var(--secondary-color);
+      color: var(--dark-blue);
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    form button:hover {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+    }
+
+    footer {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <h1>Seat Management</h1>
+    </div>
+  </header>
+  <div class="container">
+    <section>
+      <a href="/admin/dashboard" class="button" style="margin-bottom: 20px; display: inline-block">Back to Dashboard</a>
+    </section>
+    <section>
+      <h2>Courses</h2>
+      <ul>
+        <% courses.forEach(course=> { %>
+          <li>
+            <span>
+              <strong>
+                <%= course.courseCode %>
+              </strong> - <%= course.courseName %> (Seats: <%= course.seats %>)
+            </span>
+            <a href="/admin/seats/edit/<%= course.courseCode %>" class="button">Adjust Seats</a>
+          </li>
+          <% }); %>
+      </ul>
+    </section>
+    <% if (selectedCourse) { %>
+      <section>
+        <h2>Adjust Seats for <%= selectedCourse.courseName %>
+        </h2>
+        <form action="/admin/seats/update/<%= selectedCourse.courseCode %>" method="POST">
+          <label for="newSeats">New Seat Count:</label>
+          <input type="number" id="newSeats" name="newSeats" required>
+          <button type="submit">Update Seats</button>
+        </form>
+      </section>
+      <% } %>
+  </div>
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 National University of Sciences. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+
+</html>

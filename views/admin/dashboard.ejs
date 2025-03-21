@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-color: #0099cc;
+      --secondary-color: #ffcc00;
+      --accent-color: #009966;
+      --dark-blue: #003366;
+      --light-bg: #f8f9fa;
+      --card-bg: #fff;
+      --text-color: #003366;
+      --light-text: #fff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+      padding: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      margin-left: 20px;
+    }
+
+    header a {
+      margin-right: 20px;
+      color: var(--light-text);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    header a:hover {
+      background-color: var(--secondary-color);
+      color: var(--dark-blue);
+    }
+
+    nav {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    nav a {
+      color: var(--dark-blue);
+      text-decoration: none;
+      font-weight: 600;
+      margin: 0 15px;
+      padding: 10px 20px;
+      border: 2px solid var(--primary-color);
+      border-radius: 4px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      display: inline-block;
+    }
+
+    nav a:hover {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+    }
+
+    .dashboard-content {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+      justify-items: center;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      border-radius: 8px;
+      border-top: 4px solid var(--primary-color);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 25px;
+      text-align: center;
+      transition: transform 0.3s ease;
+      width: 100%;
+      max-width: 280px;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+    }
+
+    .card p {
+      font-size: 1rem;
+    }
+
+    .card-icon {
+      background-color: var(--secondary-color);
+      color: var(--dark-blue);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 15px;
+      font-size: 24px;
+    }
+
+    @media (max-width: 992px) {
+      .dashboard-content {
+        grid-template-columns: repeat(2, minmax(200px, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .dashboard-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    footer {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+      text-align: center;
+      padding: 20px;
+      margin-top: auto;
+    }
+
+    h2 {
+      color: var(--dark-blue);
+      position: relative;
+      padding-bottom: 10px;
+      text-align: center;
+    }
+
+    h2:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background-color: var(--secondary-color);
+    }
+
+    @media (max-width: 600px) {
+      nav a {
+        margin: 5px;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+      <h1>Welcome, Admin</h1>
+      <a href="/auth/logout">Logout</a>
+    </div>
+  </header>
+  <div class="container">
+    <nav>
+      <a href="/admin/courses">Course Management</a>
+      <a href="/admin/students">Student Management</a>
+      <a href="/admin/seats">Seat Management</a>
+      <a href="/admin/reports">Reports</a>
+    </nav>
+    <section>
+      <h2 style="margin-bottom: 30px">Dashboard Overview</h2>
+      <div class="dashboard-content">
+        <div class="card">
+          <div class="card-icon">C</div>
+          <h3>Courses</h3>
+          <p>Manage courses including adding, updating, deleting and setting prerequisites.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">S</div>
+          <h3>Students</h3>
+          <p>View and manage student registrations as well as override registrations.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">A</div>
+          <h3>Seats</h3>
+          <p>Adjust seat allocations for courses and monitor seat availability.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">R</div>
+          <h3>Reports</h3>
+          <p>Generate reports on course registrations, available seats and prerequisites.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 National University of Sciences. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+
+</html>

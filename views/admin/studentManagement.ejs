@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-color: #0099cc;
+      --secondary-color: #ffcc00;
+      --accent-color: #009966;
+      --dark-blue: #003366;
+      --light-bg: #f8f9fa;
+      --card-bg: #fff;
+      --text-color: #003366;
+      --light-text: #fff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+      padding: 20px 0;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    header a {
+      color: var(--light-text);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    h1,
+    h2 {
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: var(--dark-blue);
+    }
+
+    a.button,
+    .btn {
+      background-color: var(--secondary-color);
+      color: var(--dark-blue);
+      padding: 8px 16px;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 600;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    a.button:hover,
+    .btn:hover {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+    }
+
+    section {
+      margin-bottom: 30px;
+    }
+
+    .search-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .search-container label {
+      font-weight: 600;
+      color: var(--dark-blue);
+    }
+
+    .search-container input {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      flex: 1;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+
+    li {
+      background-color: var(--card-bg);
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px 15px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    li span {
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+
+    form {
+      background-color: var(--card-bg);
+      padding: 20px;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    form label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: var(--dark-blue);
+    }
+
+    form input,
+    form select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    form select[multiple] {
+      height: 100px;
+    }
+
+    form button {
+      background-color: var(--secondary-color);
+      color: var(--dark-blue);
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    form button:hover {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+    }
+
+    footer {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 600px) {
+      .search-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .search-container label {
+        margin-bottom: 5px;
+      }
+
+      .search-container input {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <h1>Student Management</h1>
+    </div>
+  </header>
+  <div class="container">
+    <section>
+      <a href="/admin/dashboard" class="button" style="margin-bottom: 20px">Back to Dashboard</a>
+    </section>
+    <section class="search-container">
+      <label for="studentSearch">Search Student:</label>
+      <input type="text" id="studentSearch" placeholder="Enter student ID or name" />
+    </section>
+    <section>
+      <h2>All Students</h2>
+      <ul id="studentList">
+        <% students.forEach(student=> { %>
+          <li data-student="<%- JSON.stringify(student) %>">
+            <span>
+              <strong>
+                <%= student.username %>
+              </strong>
+              <% if (student.name) { %> - <%= student.name %>
+                  <% } %>
+                    <% if (student.courses && student.courses.length> 0) { %>
+                      (Courses: <%= student.courses.join(", ") %>)
+            <% } %>
+          </span>
+          <div>
+            <a href=" /admin/student/remove/<%=student.username %>" class="button">Remove</a>
+                        <a href="/admin/student/edit/<%= student.username %>" class="button">Edit</a>
+  </div>
+  </li>
+  <% }); %>
+    </ul>
+    </section>
+    <section>
+      <h2>Override Registration</h2>
+      <form action="/admin/override" method="POST">
+        <label for="studentId">Student ID:</label>
+        <input type="text" id="studentId" name="studentId" required />
+        <label for="courseCode">Course Code:</label>
+        <input type="text" id="courseCode" name="courseCode" required />
+        <button type="submit">Override Registration</button>
+      </form>
+    </section>
+    </div>
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 National University of Sciences. All rights reserved.</p>
+      </div>
+    </footer>
+    <script>
+      document.getElementById("studentSearch").addEventListener("keyup", function () {
+        const query = this.value.toLowerCase();
+        const studentItems = document.querySelectorAll("#studentList li");
+        studentItems.forEach((item) => {
+          const studentData = JSON.parse(item.getAttribute("data-student"));
+          const usernameMatch = studentData.username.toLowerCase().includes(query);
+          const nameMatch = studentData.name ? studentData.name.toLowerCase().includes(query) : false;
+          item.style.display = usernameMatch || nameMatch ? "" : "none";
+        });
+      });
+    </script>
+</body>
+
+</html>
