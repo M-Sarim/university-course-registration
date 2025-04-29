@@ -1,24 +1,29 @@
 const mongoose = require("mongoose");
 
-const registeredCourseSchema = new mongoose.Schema(
-  {
-    studentId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    courseCode: {
-      type: String,
-      required: true,
-    },
-    registered: {
-      type: Boolean,
-      default: true,
-    },
+const registeredCourseSchema = new mongoose.Schema({
+  student: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
-  { timestamps: true }
-);
-
-registeredCourseSchema.index({ studentId: 1, courseCode: 1 }, { unique: true });
-
+  course: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Course",
+    required: true,
+  },
+  registrationDate: {
+    type: Date,
+    default: Date.now,
+  },
+  completed: {
+    type: Boolean,
+    default: false,
+  },
+  grade: {
+    type: String,
+    enum: ["A", "B", "C", "D", "F", "W", "I", null],
+    default: null,
+  },
+});
+registeredCourseSchema.index({ student: 1, course: 1 }, { unique: true });
 module.exports = mongoose.model("RegisteredCourse", registeredCourseSchema);

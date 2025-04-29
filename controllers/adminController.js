@@ -1,8 +1,32 @@
 const Course = require("../models/Course");
 const User = require("../models/User");
 
-exports.dashboard = (req, res) => {
-  res.render("admin/dashboard");
+const RegisteredCourse = require("../models/registeredCourse");
+
+exports.dashboard = async (req, res) => {
+  try {
+    const completedCourses = await RegisteredCourse.find({ completed: true })
+      .populate("student", "username")
+      .populate("course", "courseCode courseName")
+      .sort({ registrationDate: -1 })
+      .limit(5);
+
+    const totalCompleted = await RegisteredCourse.countDocuments({
+      completed: true,
+    });
+    const totalCourses = await RegisteredCourse.countDocuments({});
+    const completionRate =
+      totalCourses > 0 ? Math.round((totalCompleted / totalCourses) * 100) : 0;
+
+    res.render("admin/dashboard", {
+      completedCourses,
+      totalCompleted,
+      completionRate,
+    });
+  } catch (error) {
+    console.error("Error fetching dashboard data:", error);
+    res.status(500).send("Server Error");
+  }
 };
 
 exports.getCourses = async (req, res) => {
@@ -17,20 +41,18 @@ exports.getCourses = async (req, res) => {
 
 exports.saveCourse = async (req, res) => {
   try {
-    // Destructure fields from the request body.
     let {
       courseCode,
       courseName,
       department,
       level,
-      days, // expecting an array from multi-select
+      days,
       time,
       customTime,
       seats,
       prerequisites,
     } = req.body;
 
-    // Use customTime if "Other" was selected.
     if (time === "Other") {
       time = customTime;
     }
@@ -38,7 +60,6 @@ exports.saveCourse = async (req, res) => {
       throw new Error("Time slot is required.");
     }
 
-    // Convert prerequisites to an array (if provided as comma-separated string)
     const prereqArray = prerequisites
       ? prerequisites
           .split(",")
@@ -48,7 +69,6 @@ exports.saveCourse = async (req, res) => {
 
     let course = await Course.findOne({ courseCode });
     if (course) {
-      // Update existing course
       course.courseName = courseName;
       course.department = department;
       course.level = Number(level);
@@ -58,7 +78,6 @@ exports.saveCourse = async (req, res) => {
       course.prerequisites = prereqArray;
       await course.save();
     } else {
-      // Create new course
       course = new Course({
         courseCode,
         courseName,

@@ -7,13 +7,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --primary-color: #0099cc;
-      --secondary-color: #ffcc00;
-      --accent-color: #009966;
-      --dark-blue: #003366;
-      --light-bg: #f8f9fa;
+      --primary-color: #0088b9;
+      --secondary-color: #19396e;
+      --accent-yellow: #ffc82e;
+      --accent-green: #1e8c3f;
+      --light-bg: #e6f4f9;
       --card-bg: #fff;
-      --text-color: #003366;
+      --text-color: #19396e;
       --light-text: #fff;
     }
 
@@ -29,6 +29,7 @@
       background-color: var(--primary-color);
       color: var(--light-text);
       padding: 15px;
+      border-bottom: 3px solid var(--accent-yellow);
     }
 
     .navbar {
@@ -41,6 +42,7 @@
 
     .navbar h1 {
       font-size: 1.5rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     }
 
     nav a {
@@ -50,11 +52,12 @@
       font-weight: 600;
       padding: 6px 12px;
       border-radius: 4px;
+      transition: background-color 0.3s;
     }
 
     nav a:hover {
-      background-color: var(--secondary-color);
-      color: var(--dark-blue);
+      background-color: var(--accent-yellow);
+      color: var(--secondary-color);
     }
 
     .container {
@@ -65,9 +68,26 @@
     .card {
       background-color: var(--card-bg);
       border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
       padding: 20px;
       margin-bottom: 20px;
+      border-top: 4px solid var(--accent-green);
+    }
+
+    .card h2 {
+      color: var(--secondary-color);
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .card h2:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 3px;
+      width: 80px;
+      background-color: var(--accent-yellow);
     }
 
     table {
@@ -77,6 +97,7 @@
 
     table thead tr {
       background-color: var(--secondary-color);
+      color: var(--light-text);
     }
 
     table th,
@@ -88,17 +109,18 @@
 
     .btn {
       background-color: var(--secondary-color);
-      color: var(--dark-blue);
+      color: var(--light-text);
       padding: 6px 12px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 600;
-      transition: background 0.3s;
+      transition: all 0.3s ease;
     }
 
     .btn:hover {
-      background-color: #c08900;
+      background-color: var(--accent-yellow);
+      color: var(--secondary-color);
     }
 
     footer {
@@ -107,6 +129,7 @@
       text-align: center;
       padding: 15px;
       margin-top: 30px;
+      border-top: 3px solid var(--accent-yellow);
     }
   </style>
 </head>
@@ -136,12 +159,13 @@
             <th>Time</th>
             <th>Days</th>
             <th>Seats</th>
+            <th>Prerequisites</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody id="availableCourses">
           <tr>
-            <td colspan="8">Loading courses...</td>
+            <td colspan="9">Loading courses...</td>
           </tr>
         </tbody>
       </table>
@@ -173,6 +197,10 @@
                   : "N/A"
                 }</td>
                   <td>${course.seats}</td>
+                  <td>${course.prerequisites && course.prerequisites.length
+                  ? course.prerequisites.join(", ")
+                  : "None"
+                }</td>
                   <td>
                     <button class="btn" onclick="registerCourse('${course.courseCode
                 }')">
@@ -183,14 +211,14 @@
               tbody.appendChild(tr);
             });
           } else {
-            tbody.innerHTML = `<tr><td colspan="8">No courses available</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="9">No courses available</td></tr>`;
           }
         })
         .catch((err) => {
           console.error("Error fetching courses:", err);
           document.getElementById("availableCourses").innerHTML = `
               <tr>
-                <td colspan="8" style="color:red;">Error loading courses</td>
+                <td colspan="9" style="color:red;">Error loading courses</td>
               </tr>
             `;
         });
@@ -208,9 +236,11 @@
             alert(`Registered for course: ${courseCode}`);
             fetchAvailableCourses();
           } else {
-            alert(
-              "Registration failed: " + (data.message || "Unknown error")
-            );
+            if (data.missingPrerequisites) {
+              alert(`Registration failed. Missing prerequisites: ${data.missingPrerequisites.join(', ')}`);
+            } else {
+              alert("Registration failed: " + (data.message || "Unknown error"));
+            }
           }
         })
         .catch((err) => {

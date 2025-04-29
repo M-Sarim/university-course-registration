@@ -37,6 +37,10 @@ exports.postLogin = async (req, res) => {
       }
     }
 
+    res.cookie("userId", user._id.toString(), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
     res.cookie("userRole", user.role, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -60,6 +64,7 @@ exports.postLogin = async (req, res) => {
 };
 
 exports.logout = (req, res) => {
+  res.clearCookie("userId");
   res.clearCookie("userRole");
   res.clearCookie("username");
   res.redirect("/");

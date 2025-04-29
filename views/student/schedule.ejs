@@ -8,11 +8,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --primary-color: #0099cc;
-      --secondary-color: #ffcc00;
-      --light-bg: #f8f9fa;
+      --primary-color: #0088b9;
+      --secondary-color: #19396e;
+      --accent-yellow: #ffc82e;
+      --accent-green: #1e8c3f;
+      --light-bg: #e6f4f9;
       --card-bg: #fff;
-      --text-color: #003366;
+      --text-color: #19396e;
       --light-text: #fff;
     }
 
@@ -33,6 +35,7 @@
       color: var(--light-text);
       padding: 15px 0;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      border-bottom: 3px solid var(--accent-yellow);
     }
 
     .navbar {
@@ -46,6 +49,7 @@
     .navbar h1 {
       font-size: 1.5rem;
       margin: 0;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     }
 
     .nav-links a {
@@ -59,7 +63,8 @@
     }
 
     .nav-links a:hover {
-      background-color: rgba(255, 255, 255, 0.15);
+      background-color: var(--accent-yellow);
+      color: var(--secondary-color);
     }
 
     .container {
@@ -70,14 +75,28 @@
     .card {
       background-color: var(--card-bg);
       border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
       padding: 20px;
       margin-bottom: 20px;
+      border-top: 4px solid var(--accent-green);
     }
 
     .card h2 {
       margin-bottom: 15px;
       font-size: 1.2rem;
+      color: var(--secondary-color);
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .card h2:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 3px;
+      width: 80px;
+      background-color: var(--accent-yellow);
     }
 
     table {
@@ -87,6 +106,7 @@
 
     table thead tr {
       background-color: var(--secondary-color);
+      color: var(--light-text);
     }
 
     table th,
@@ -102,6 +122,7 @@
       text-align: center;
       padding: 15px;
       margin-top: 30px;
+      border-top: 3px solid var(--accent-yellow);
     }
   </style>
 </head>
@@ -132,12 +153,9 @@
             <th>Friday</th>
           </tr>
         </thead>
-        <tbody id="scheduleBody">
-        </tbody>
+        <tbody id="scheduleBody"></tbody>
       </table>
-      <p style="margin-top: 10px; font-size: 0.9rem">
-        * Your schedule is maintained locally. Conflicts will be highlighted.
-      </p>
+
     </div>
   </div>
   <footer>
@@ -145,32 +163,148 @@
   </footer>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      buildScheduleTable();
+      loadRegisteredCourses();
     });
-    function buildScheduleTable() {
-      const timeSlots = [
-        "8:00",
-        "9:00",
-        "10:00",
-        "11:00",
-        "12:00",
-        "13:00",
-        "14:00",
-        "15:00",
-        "16:00",
-        "17:00"
+
+    async function loadRegisteredCourses() {
+      try {
+        const response = await fetch("/student/registered-courses");
+        const data = await response.json();
+
+        if (data.success) {
+          const scheduleBody = document.getElementById("scheduleBody");
+          scheduleBody.innerHTML = "";
+
+          const timeSlots = [];
+          for (let hour = 0; hour < 24; hour++) {
+            timeSlots.push(`${hour.toString().padStart(2, "0")}:00`);
+          }
+
+          const days = [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+          ];
+
+          timeSlots.forEach((slot) => {
+            let rowHTML = `<tr><td><strong>${formatTimeDisplay(
+              slot
+            )}</strong></td>`;
+            days.forEach((day) => {
+              rowHTML += `<td data-day="${day}" data-time="${slot}"></td>`;
+            });
+            rowHTML += "</tr>";
+            scheduleBody.innerHTML += rowHTML;
+          });
+
+          const activeCourses = data.courses.filter(course => !course.completed);
+
+          if (activeCourses && activeCourses.length > 0) {
+            activeCourses.forEach((course) => {
+              if (!course.time || !course.days || !course.days.length) return;
+
+              const times = course.time.split("-");
+              if (times.length !== 2) return;
+
+              const startTime = times[0].trim();
+              const endTime = times[1].trim();
+
+              course.days.forEach((day) => {
+                const dayIndex = getDayIndex(day);
+                if (dayIndex === -1) return;
+
+                const startSlot = getTimeSlotIndex(startTime);
+                const endSlot = getTimeSlotIndex(endTime);
+
+                if (startSlot !== -1 && endSlot !== -1) {
+                  const cell =
+                    scheduleBody.children[startSlot].children[dayIndex + 1];
+                  if (cell) {
+                    if (cell.innerHTML.trim() !== "") {
+                      cell.style.backgroundColor = "#ffebee";
+                      cell.style.border = "1px solid #e74c3c";
+                    }
+
+                    cell.innerHTML = `
+                        <div class="course-block" style="background-color: ${getRandomColor(
+                      course.courseCode
+                    )}; color: white; padding: 5px; border-radius: 4px; margin: 2px;">
+                          <strong>${course.courseCode}</strong><br>
+                          ${course.courseName}
+                        </div>
+                      `;
+                    cell.rowSpan = endSlot - startSlot + 1;
+                  }
+                }
+              });
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error loading registered courses:", error);
+        document.getElementById("scheduleBody").innerHTML =
+          '<tr><td colspan="6" style="color:red;">Error loading schedule</td></tr>';
+      }
+    }
+
+    function formatTimeDisplay(time) {
+      const [hours] = time.split(":");
+      const hour = parseInt(hours);
+      const period = hour >= 12 ? "PM" : "AM";
+      const displayHour = hour % 12 || 12;
+      return `${displayHour}:00 ${period}`;
+    }
+
+    function getDayIndex(day) {
+      const dayMap = {
+        mon: 0,
+        monday: 0,
+        tue: 1,
+        tuesday: 1,
+        wed: 2,
+        wednesday: 2,
+        thu: 3,
+        thursday: 3,
+        fri: 4,
+        friday: 4,
+      };
+      const index = dayMap[day.toLowerCase()];
+      console.log(`Day: ${day}, Index: ${index}`);
+      return index !== undefined ? index : -1;
+    }
+
+    function getTimeSlotIndex(time) {
+      const [hours] = time.split(":");
+      let hour = parseInt(hours);
+      if (time.toLowerCase().includes("pm") && hour !== 12) hour += 12;
+      if (time.toLowerCase().includes("am") && hour === 12) hour = 0;
+      const index = hour >= 0 && hour < 24 ? hour : -1;
+      console.log(`Time: ${time}, Hour: ${hour}, Index: ${index}`);
+      return index;
+    }
+
+    function getRandomColor(courseCode) {
+      const colors = [
+        "#0088b9",
+        "#19396e",
+        "#1e8c3f",
+        "#ffc82e",
+        "#3498db",
+        "#2ecc71",
+        "#9b59b6",
+        "#1abc9c",
+        "#e67e22",
+        "#34495e",
       ];
-      const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-      const tbody = document.getElementById("scheduleBody");
-      tbody.innerHTML = "";
-      timeSlots.forEach((slot) => {
-        let rowHTML = `<tr><td><strong>${slot}</strong></td>`;
-        days.forEach((day) => {
-          rowHTML += `<td data-day="${day}" data-time="${slot}"></td>`;
-        });
-        rowHTML += "</tr>";
-        tbody.innerHTML += rowHTML;
-      });
+      const index =
+        Math.abs(
+          courseCode
+            .split("")
+            .reduce((acc, char) => acc + char.charCodeAt(0), 0)
+        ) % colors.length;
+      return colors[index];
     }
   </script>
 </body>

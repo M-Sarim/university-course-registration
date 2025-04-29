@@ -5,21 +5,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Student Dashboard</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
-
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
   <style>
     :root {
-      --primary-color: #0099cc;
-      --secondary-color: #ffcc00;
-      --accent-color: #009966;
-      --dark-blue: #003366;
-      --light-bg: #f8f9fa;
+      --primary-color: #0088b9;
+      --secondary-color: #19396e;
+      --accent-color: #ffc82e;
+      --green-accent: #1e8c3f;
+      --light-bg: #f0f8fc;
       --card-bg: #fff;
-      --text-color: #003366;
+      --text-color: #19396e;
       --light-text: #fff;
-
     }
 
     * {
@@ -38,7 +35,8 @@
       background-color: var(--primary-color);
       color: var(--light-text);
       padding: 15px 0;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      border-bottom: 4px solid var(--accent-color);
     }
 
     .navbar {
@@ -51,6 +49,7 @@
 
     .navbar h1 {
       font-size: 1.5rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     }
 
     nav.nav-links {
@@ -64,11 +63,12 @@
       font-weight: 600;
       padding: 6px 12px;
       border-radius: 4px;
-      transition: background-color 0.3s;
+      transition: all 0.3s;
     }
 
     nav.nav-links a:hover {
-      background-color: rgba(255, 255, 255, 0.15);
+      background-color: var(--accent-color);
+      color: var(--secondary-color);
     }
 
     .container {
@@ -82,20 +82,24 @@
       text-align: center;
       padding: 15px;
       margin-top: 30px;
+      border-top: 4px solid var(--accent-color);
     }
 
     .card {
       background-color: var(--card-bg);
       border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       padding: 20px;
       margin-bottom: 20px;
+      border-top: 3px solid var(--green-accent);
     }
 
     .card h2 {
       margin-bottom: 15px;
       font-size: 1.2rem;
-      color: var(--dark-blue);
+      color: var(--secondary-color);
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--accent-color);
     }
 
     .row {
@@ -123,21 +127,28 @@
       margin-bottom: 10px;
       border: 1px solid #ddd;
       border-radius: 4px;
+      transition: border 0.3s;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-color);
     }
 
     .btn {
       background-color: var(--secondary-color);
-      color: var(--dark-blue);
+      color: var(--light-text);
       padding: 8px 16px;
       border-radius: 4px;
       border: none;
       cursor: pointer;
       font-weight: 600;
-      transition: background 0.3s;
+      transition: all 0.3s;
     }
 
     .btn:hover {
-      background-color: #c08900;
+      background-color: var(--accent-color);
+      color: var(--secondary-color);
     }
 
     table {
@@ -146,7 +157,8 @@
     }
 
     table thead tr {
-      background-color: var(--secondary-color);
+      background-color: var(--primary-color);
+      color: var(--light-text);
     }
 
     table th,
@@ -154,6 +166,10 @@
       padding: 8px;
       text-align: left;
       border-bottom: 1px solid #ddd;
+    }
+
+    table tr:hover {
+      background-color: rgba(0, 136, 185, 0.05);
     }
 
     #calendar {
@@ -165,6 +181,48 @@
       background-color: rgba(231, 76, 60, 0.7) !important;
     }
 
+    .completed-badge {
+      background-color: var(--green-accent);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      display: inline-block;
+    }
+
+    .complete-btn {
+      background-color: var(--primary-color);
+      color: white;
+      margin-right: 5px;
+      padding: 5px 10px;
+      font-size: 0.9em;
+    }
+
+    .complete-btn:hover {
+      background-color: var(--accent-color);
+      color: var(--secondary-color);
+    }
+
+    .drop-btn {
+      background-color: #e74c3c;
+    }
+
+    .drop-btn:hover {
+      background-color: #c0392b;
+    }
+
+    #completedCoursesTable tr:nth-child(even) {
+      background-color: rgba(0, 136, 185, 0.05);
+    }
+
+    #completedCoursesTable tr:hover {
+      background-color: rgba(0, 136, 185, 0.1);
+    }
+
+    #completedCoursesTable td {
+      padding: 8px;
+    }
+
     .modal {
       display: none;
       position: fixed;
@@ -174,23 +232,68 @@
       width: 100%;
       height: 100%;
       overflow: auto;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(25, 57, 110, 0.7);
     }
 
     .modal-content {
-      background-color: var(--card-bg);
+      background-color: #fff;
       margin: 10% auto;
       padding: 20px;
       border-radius: 8px;
       width: 80%;
       max-width: 600px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      border-top: 4px solid var(--accent-color);
     }
 
     .close-modal {
       float: right;
       font-size: 1.5rem;
       cursor: pointer;
+      color: var(--primary-color);
+      transition: color 0.3s;
+    }
+
+    .close-modal:hover {
+      color: var(--accent-color);
+    }
+
+    label {
       color: var(--secondary-color);
+      font-weight: 600;
+    }
+
+    .fc-button-primary {
+      background-color: var(--secondary-color) !important;
+      border-color: var(--secondary-color) !important;
+    }
+
+    .fc-button-primary:hover {
+      background-color: var(--primary-color) !important;
+      border-color: var(--primary-color) !important;
+    }
+
+    .fc-button-active {
+      background-color: var(--accent-color) !important;
+      border-color: var(--accent-color) !important;
+      color: var(--secondary-color) !important;
+    }
+
+    .fc-col-header-cell {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+    }
+
+    .fc-col-header-cell-cushion {
+      color: var(--light-text);
+    }
+
+    .fc-timegrid-slot {
+      border-color: rgba(0, 136, 185, 0.1);
+    }
+
+    .fc-today-button {
+      color: var(--light-text) !important;
     }
   </style>
 </head>
@@ -234,6 +337,7 @@
             <option value="500">500</option>
           </select>
         </div>
+
         <div class="col-3">
           <label for="days">Days</label>
           <select id="days" class="form-control">
@@ -284,7 +388,7 @@
     </div>
 
     <div class="card">
-      <h2>Your Registered Courses</h2>
+      <h2>My Registered Courses</h2>
       <table>
         <thead>
           <tr>
@@ -292,12 +396,27 @@
             <th>Title</th>
             <th>Department</th>
             <th>Level</th>
+            <th>Days</th>
+            <th>Time</th>
+            <th>Actions</th>
           </tr>
         </thead>
-        <tbody id="registeredCourseTableBody">
+        <tbody id="registeredCoursesTable">
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Completed Courses</h2>
+      <table>
+        <thead>
           <tr>
-            <td colspan="4">Loading registered courses...</td>
+            <th>Course Code</th>
+            <th>Title</th>
+            <th>Grade</th>
           </tr>
+        </thead>
+        <tbody id="completedCoursesTable">
         </tbody>
       </table>
     </div>
@@ -336,60 +455,74 @@
       const monday = new Date(now);
       monday.setDate(now.getDate() + diffToMonday);
 
-      registeredCourses.forEach((course) => {
+      const activeCourses = registeredCourses.filter(course => !course.completed);
+
+      activeCourses.forEach((course) => {
         if (!course.time || !course.days || !course.days.length) return;
+
         const times = course.time.split("-");
         if (times.length !== 2) return;
+
         const startTime = times[0].trim();
         const endTime = times[1].trim();
+
         course.days.forEach((day) => {
-          let dayIndex;
-          switch (day.toLowerCase()) {
-            case "mon":
-            case "monday":
-              dayIndex = 0;
-              break;
-            case "tue":
-            case "tuesday":
-              dayIndex = 1;
-              break;
-            case "wed":
-            case "wednesday":
-              dayIndex = 2;
-              break;
-            case "thu":
-            case "thursday":
-              dayIndex = 3;
-              break;
-            case "fri":
-            case "friday":
-              dayIndex = 4;
-              break;
-            case "sat":
-            case "saturday":
-              dayIndex = 5;
-              break;
-            case "sun":
-            case "sunday":
-              dayIndex = 6;
-              break;
-            default:
-              dayIndex = 0;
-          }
+          const dayShort = day.toLowerCase().substring(0, 3);
+          const dayMap = {
+            'mon': 0,
+            'tue': 1,
+            'wed': 2,
+            'thu': 3,
+            'fri': 4,
+            'sat': 5,
+            'sun': 6
+          };
+          const dayIndex = dayMap[dayShort];
+          if (dayIndex === undefined) return;
+
           let eventDate = new Date(monday);
           eventDate.setDate(monday.getDate() + dayIndex);
           let dateStr = eventDate.toISOString().split("T")[0];
-          let eventStart = `${dateStr}T${startTime}:00`;
-          let eventEnd = `${dateStr}T${endTime}:00`;
+
+          const formatTime = (time) => {
+            const [hours, minutes] = time.split(':');
+            let hour = parseInt(hours);
+            if (time.toLowerCase().includes('pm') && hour !== 12) hour += 12;
+            if (time.toLowerCase().includes('am') && hour === 12) hour = 0;
+            return `${hour.toString().padStart(2, '0')}:${minutes || '00'}:00`;
+          };
+
+          let eventStart = `${dateStr}T${formatTime(startTime)}`;
+          let eventEnd = `${dateStr}T${formatTime(endTime)}`;
+
           events.push({
             id: course.courseCode,
             title: `${course.courseCode} - ${course.courseName}`,
             start: eventStart,
             end: eventEnd,
-            extendedProps: { conflict: false },
+            extendedProps: {
+              department: course.department,
+              level: course.level,
+              days: course.days,
+              time: course.time,
+              conflict: false
+            },
+            backgroundColor: getRandomColor(course.courseCode),
+            borderColor: '#19396e',
+            textColor: '#ffffff'
           });
         });
       });
+
+      events.forEach((event1, i) => {
+        events.forEach((event2, j) => {
+          if (i !== j && event1.start === event2.start) {
+            event1.extendedProps.conflict = true;
+            event2.extendedProps.conflict = true;
+          }
+        });
+      });
+
       return events;
     }
 
@@ -448,10 +581,17 @@
       if (time) queryParams.push(`time=${encodeURIComponent(time)}`);
       let queryString = queryParams.join("&");
 
-      fetch(`/student/search?${queryString}`)
+      fetch("/api/courses")
         .then((res) => res.json())
         .then((data) => {
-          updateCourseTable(data.courses || []);
+          const filteredCourses = (data.courses || []).filter(course => {
+            const matchesDepartment = !department || course.department === department;
+            const matchesLevel = !level || course.level === level;
+            const matchesDay = !day || (course.days && course.days.includes(day));
+            const matchesTime = !time || isTimeInRange(course.time, time);
+            return matchesDepartment && matchesLevel && matchesDay && matchesTime;
+          });
+          updateCourseTable(filteredCourses);
         })
         .catch((err) => {
           console.error(err);
@@ -461,43 +601,64 @@
               </tr>
             `;
         });
+
+      function isTimeInRange(courseTime, selectedTime) {
+        if (!courseTime) return false;
+        const [start, end] = courseTime.split('-').map(t => t.trim());
+        const timeRanges = {
+          morning: ['08:00', '12:00'],
+          afternoon: ['12:00', '16:00'],
+          evening: ['16:00', '20:00']
+        };
+        const [rangeStart, rangeEnd] = timeRanges[selectedTime] || [];
+        if (!rangeStart || !rangeEnd) return true;
+
+        return start >= rangeStart && end <= rangeEnd;
+      }
     }
 
-    function fetchRegisteredCourses() {
-      fetch("/api/registered-courses")
-        .then((res) => res.json())
-        .then((data) => {
-          const courses = data.courses || [];
-          const tbody = document.getElementById("registeredCourseTableBody");
-          tbody.innerHTML = "";
-          if (courses.length > 0) {
-            courses.forEach((c) => {
-              const row = document.createElement("tr");
+    async function loadRegisteredCourses() {
+      try {
+        const response = await fetch('/student/registered-courses');
+        const data = await response.json();
+
+        if (data.success) {
+          const tbody = document.getElementById('registeredCoursesTable');
+          tbody.innerHTML = '';
+
+          if (data.courses && data.courses.length > 0) {
+            data.courses.forEach(course => {
+              const row = document.createElement('tr');
               row.innerHTML = `
-                  <td>${c.courseCode}</td>
-                  <td>${c.courseName}</td>
-                  <td>${c.department}</td>
-                  <td>${c.level}</td>
+                  <td>${course.courseCode}</td>
+                  <td>${course.courseName}</td>
+                  <td>${course.department}</td>
+                  <td>${course.level}</td>
+                  <td>${Array.isArray(course.days) ? course.days.join(', ') : 'N/A'}</td>
+                  <td>${course.time || 'N/A'}</td>
+              <td>
+                ${course.completed ?
+                  `<span class="completed-badge">Completed (${course.grade || 'No grade'})</span>` :
+                  `<button class="btn complete-btn" data-registration-id="${course.registrationId}">Mark Complete</button>
+                   <button class="btn drop-btn" data-course-code="${course.courseCode}">Drop Course</button>`
+                }
+              </td>
                 `;
               tbody.appendChild(row);
             });
-          } else {
-            tbody.innerHTML = `<tr><td colspan="4">No registered courses found</td></tr>`;
-          }
-          const events = updateCalendarEvents(courses);
-          if (calendar) {
+
+            const events = updateCalendarEvents(data.courses);
             calendar.removeAllEvents();
-            events.forEach((event) => calendar.addEvent(event));
+            calendar.addEventSource(events);
+          } else {
+            tbody.innerHTML = '<tr><td colspan="7">No registered courses found</td></tr>';
           }
-        })
-        .catch((err) => {
-          console.error(err);
-          document.getElementById("registeredCourseTableBody").innerHTML = `
-              <tr>
-                <td colspan="4" style="color:red;">Error loading registered courses</td>
-              </tr>
-            `;
-        });
+        }
+      } catch (error) {
+        console.error('Error loading registered courses:', error);
+        document.getElementById('registeredCoursesTable').innerHTML =
+          '<tr><td colspan="7" style="color:red;">Error loading registered courses</td></tr>';
+      }
     }
 
     function showCourseDetails(course) {
@@ -520,9 +681,9 @@
     });
 
     fetchCourses();
-    fetchRegisteredCourses();
+    loadRegisteredCourses();
+    loadCompletedCourses();
     setInterval(fetchCourses, 15000);
-    setInterval(fetchRegisteredCourses, 30000);
 
     document.addEventListener("DOMContentLoaded", function () {
       const calendarEl = document.getElementById("calendar");
@@ -533,13 +694,39 @@
           center: "title",
           right: "timeGridWeek,timeGridDay",
         },
+        slotMinTime: "00:00:00",
+        slotMaxTime: "24:00:00",
+        allDaySlot: false,
         nowIndicator: true,
+        slotDuration: "01:00:00",
+        expandRows: true,
+        height: 'auto',
         events: [],
         eventDidMount: function (info) {
           if (info.event.extendedProps.conflict) {
             info.el.classList.add("conflict");
           }
+
+          info.el.title = `${info.event.title}\n${info.event.extendedProps.department || ''}\n${info.event.extendedProps.level || ''}`;
+
+          if (info.event.extendedProps.completed) {
+            info.el.style.opacity = '0.7';
+            info.el.style.textDecoration = 'line-through';
+          }
         },
+        eventClick: function (info) {
+          showCourseDetails({
+            courseCode: info.event.id,
+            courseName: info.event.title.split(' - ')[1],
+            department: info.event.extendedProps.department,
+            level: info.event.extendedProps.level,
+            days: info.event.extendedProps.days,
+            time: info.event.extendedProps.time
+          });
+        },
+        datesSet: function (dateInfo) {
+          loadRegisteredCourses();
+        }
       });
       calendar.render();
     });
@@ -547,6 +734,114 @@
     document
       .getElementById("searchBtn")
       .addEventListener("click", applyFilter);
+
+    async function loadCompletedCourses() {
+      try {
+        const response = await fetch('/student/completed-courses');
+        const data = await response.json();
+
+        const tbody = document.getElementById('completedCoursesTable');
+        tbody.innerHTML = '';
+
+        if (data.success && data.courses.length > 0) {
+          data.courses.forEach(course => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${course.courseCode}</td>
+                <td>${course.courseName}</td>
+                <td>${course.grade || 'N/A'}</td>
+              `;
+            tbody.appendChild(row);
+          });
+        } else {
+          tbody.innerHTML = '<tr><td colspan="3">No completed courses found</td></tr>';
+        }
+      } catch (error) {
+        console.error('Error loading completed courses:', error);
+        document.getElementById('completedCoursesTable').innerHTML =
+          '<tr><td colspan="3" style="color:red;">Error loading completed courses</td></tr>';
+      }
+    }
+
+    document.addEventListener('click', async (e) => {
+      if (e.target.classList.contains('complete-btn')) {
+        const registrationId = e.target.dataset.registrationId;
+        const grade = prompt('Enter grade for this course (A, B, C, D, F, W, I):');
+
+        if (grade && ['A', 'B', 'C', 'D', 'F', 'W', 'I'].includes(grade.toUpperCase())) {
+          try {
+            const response = await fetch('/student/mark-complete', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                registrationId,
+                grade: grade.toUpperCase()
+              })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+              alert('Course marked as completed successfully');
+              loadRegisteredCourses();
+              loadCompletedCourses();
+            } else {
+              alert(data.message || 'Error marking course complete');
+            }
+          } catch (error) {
+            console.error('Error marking course complete:', error);
+            alert('Error marking course complete');
+          }
+        } else if (grade) {
+          alert('Please enter a valid grade (A, B, C, D, F, W, I)');
+        }
+      }
+      if (e.target.classList.contains('drop-btn')) {
+        const courseCode = e.target.dataset.courseCode;
+        if (!confirm('Are you sure you want to drop this course?')) {
+          return;
+        }
+
+        try {
+          const response = await fetch(`/student/drop-course/${courseCode}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          const data = await response.json();
+
+          if (data.success) {
+            alert('Course dropped successfully');
+            loadRegisteredCourses();
+            fetchCourses();
+          } else {
+            alert(data.message || 'Error dropping course');
+          }
+        } catch (error) {
+          console.error('Error dropping course:', error);
+          alert('Error dropping course');
+        }
+      }
+    });
+
+    function getRandomColor(courseCode) {
+      const colors = [
+        '#0088b9',
+        '#19396e',
+        '#1e8c3f',
+        '#ffc82e',
+        '#0077a3',
+        '#132e58',
+        '#167534',
+        '#e6b629',
+        '#00a0d6',
+        '#5b7bb8'
+      ];
+      const index = Math.abs(courseCode.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)) % colors.length;
+      return colors[index];
+    }
   </script>
 </body>
 

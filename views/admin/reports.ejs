@@ -5,30 +5,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Reports</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --primary-color: #0099cc;
-      --secondary-color: #ffcc00;
-      --accent-color: #009966;
-      --dark-blue: #003366;
-      --light-bg: #f8f9fa;
-      --card-bg: #fff;
-      --text-color: #003366;
+      --primary-blue: #0088b9;
+      --navy-blue: #19396e;
+      --yellow-accent: #ffc82e;
+      --green-accent: #1e8c3f;
+      --light-blue-bg: #e6f4f9;
+      --text-color: #333;
       --light-text: #fff;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
     }
 
     body {
       font-family: "Poppins", sans-serif;
-      background-color: var(--light-bg);
+      background-color: var(--light-blue-bg);
       color: var(--text-color);
       line-height: 1.6;
+      margin: 0;
+      padding: 0;
     }
 
     .container {
@@ -38,101 +32,120 @@
     }
 
     header {
-      background-color: var(--primary-color);
+      background-color: var(--primary-blue);
       color: var(--light-text);
       padding: 20px 0;
       text-align: center;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      border-bottom: 4px solid var(--yellow-accent);
     }
 
     header a {
-      color: var(--light-text);
+      display: inline-block;
+      background-color: var(--yellow-accent);
+      color: var(--navy-blue);
       text-decoration: none;
       font-weight: 600;
+      padding: 8px 24px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    header a:hover {
+      background-color: #fff;
+      color: var(--navy-blue);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     h1,
     h2 {
       margin-top: 20px;
       margin-bottom: 10px;
-      color: var(--dark-blue);
+      color: var(--navy-blue);
     }
 
-    a.button,
-    .btn {
-      background-color: var(--secondary-color);
-      color: var(--dark-blue);
-      padding: 8px 16px;
-      text-decoration: none;
-      border-radius: 4px;
-      font-weight: 600;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      cursor: pointer;
+    h2 {
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--yellow-accent);
       display: inline-block;
-    }
-
-    a.button:hover,
-    .btn:hover {
-      background-color: var(--primary-color);
-      color: var(--light-text);
-    }
-
-    section {
-      margin-bottom: 30px;
-    }
-
-    .report-section {
-      background-color: var(--card-bg);
-      padding: 20px;
-      border-radius: 4px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-    }
-
-    .report-section form {
-      margin-bottom: 15px;
-    }
-
-    .report-section form label {
-      font-weight: 600;
-      color: var(--dark-blue);
-    }
-
-    .report-section form input {
-      margin: 0 10px 0 5px;
-      padding: 5px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-    }
-
-    .report-section form button {
-      background-color: var(--secondary-color);
-      color: var(--dark-blue);
-      padding: 8px 16px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    .report-section form button:hover {
-      background-color: var(--primary-color);
-      color: var(--light-text);
     }
 
     ul {
       list-style: none;
       padding: 0;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
 
     li {
-      background-color: var(--card-bg);
+      background-color: #fff;
+      border-left: 3px solid var(--primary-blue);
+      border-radius: 4px;
+      padding: 15px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .report-section {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      border-top: 4px solid var(--green-accent);
+    }
+
+    .report-section form {
+      margin-bottom: 10px;
+    }
+
+    .report-section form label {
+      font-weight: 600;
+      color: var(--navy-blue);
+    }
+
+    .report-section form input {
+      margin: 0 10px;
+      padding: 5px;
       border: 1px solid #ddd;
       border-radius: 4px;
-      padding: 10px;
-      margin-bottom: 8px;
+    }
+
+    .report-section form input:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 2px rgba(0, 136, 185, 0.2);
+    }
+
+    .report-section form button {
+      background-color: var(--navy-blue);
+      color: var(--light-text);
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .report-section form button:hover {
+      background-color: var(--yellow-accent);
+      color: var(--navy-blue);
+    }
+
+    a.button {
+      background-color: var(--navy-blue);
+      color: var(--light-text);
+      padding: 8px 16px;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    a.button:hover {
+      background-color: var(--yellow-accent);
+      color: var(--navy-blue);
     }
 
     .export-buttons {
@@ -140,28 +153,33 @@
     }
 
     .export-buttons button {
-      background-color: var(--secondary-color);
-      color: var(--dark-blue);
+      background-color: var(--navy-blue);
+      color: var(--light-text);
       padding: 8px 16px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 600;
       margin-right: 10px;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     .export-buttons button:hover {
-      background-color: var(--primary-color);
-      color: var(--light-text);
+      background-color: var(--yellow-accent);
+      color: var(--navy-blue);
     }
 
     footer {
-      background-color: var(--primary-color);
+      background-color: var(--primary-blue);
       color: var(--light-text);
       text-align: center;
       padding: 20px;
       margin-top: 40px;
+      border-top: 4px solid var(--yellow-accent);
+    }
+
+    strong {
+      color: var(--navy-blue);
     }
   </style>
 </head>
@@ -170,12 +188,14 @@
   <header>
     <div class="container">
       <h1>Reports</h1>
+      <a href="/auth/logout">Logout</a>
     </div>
   </header>
   <div class="container">
     <section>
       <a href="/admin/dashboard" class="button">Back to Dashboard</a>
     </section>
+
     <section class="report-section" id="report-students-course">
       <h2>Students Registered for a Specific Course</h2>
       <form action="/admin/reports/studentsByCourse" method="GET">
@@ -192,11 +212,16 @@
             <% }); %>
         </ul>
         <div class="export-buttons">
-          <button class="export-csv" data-target="studentsForCourseList">Export as CSV</button>
-          <button class="export-pdf" data-target="studentsForCourseList">Export as PDF</button>
+          <button class="export-csv" data-target="studentsForCourseList">
+            Export as CSV
+          </button>
+          <button class="export-pdf" data-target="studentsForCourseList">
+            Export as PDF
+          </button>
         </div>
         <% } %>
     </section>
+
     <section class="report-section" id="report-courses-seats">
       <h2>Courses with Available Seats</h2>
       <form action="/admin/reports/coursesWithSeats" method="GET">
@@ -214,11 +239,16 @@
             <% }); %>
         </ul>
         <div class="export-buttons">
-          <button class="export-csv" data-target="coursesWithSeatsList">Export as CSV</button>
-          <button class="export-pdf" data-target="coursesWithSeatsList">Export as PDF</button>
+          <button class="export-csv" data-target="coursesWithSeatsList">
+            Export as CSV
+          </button>
+          <button class="export-pdf" data-target="coursesWithSeatsList">
+            Export as PDF
+          </button>
         </div>
         <% } %>
     </section>
+
     <section class="report-section" id="report-missing-prereqs">
       <h2>Students Missing Prerequisites</h2>
       <form action="/admin/reports/missingPrerequisites" method="GET">
@@ -230,13 +260,18 @@
             <li>
               <strong>
                 <%= student.username %>
-              </strong> - Missing prerequisites for <%= student.courseCode %>
+              </strong> - Missing prerequisites for
+              <%= student.courseCode %>
             </li>
             <% }); %>
         </ul>
         <div class="export-buttons">
-          <button class="export-csv" data-target="studentsMissingPrereqsList">Export as CSV</button>
-          <button class="export-pdf" data-target="studentsMissingPrereqsList">Export as PDF</button>
+          <button class="export-csv" data-target="studentsMissingPrereqsList">
+            Export as CSV
+          </button>
+          <button class="export-pdf" data-target="studentsMissingPrereqsList">
+            Export as PDF
+          </button>
         </div>
         <% } %>
     </section>
@@ -246,6 +281,7 @@
       <p>&copy; 2025 National University of Sciences. All rights reserved.</p>
     </div>
   </footer>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
     function exportTableToCSV(listId, filename) {
@@ -263,6 +299,7 @@
       link.click();
       document.body.removeChild(link);
     }
+
     async function exportListToPDF(listId, filename) {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
@@ -275,12 +312,14 @@
       });
       doc.save(filename);
     }
+
     document.querySelectorAll(".export-csv").forEach((button) => {
       button.addEventListener("click", function () {
         const targetList = this.getAttribute("data-target");
         exportTableToCSV(targetList, targetList + ".csv");
       });
     });
+
     document.querySelectorAll(".export-pdf").forEach((button) => {
       button.addEventListener("click", function () {
         const targetList = this.getAttribute("data-target");

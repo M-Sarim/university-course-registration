@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 
-mongoose.set("strictQuery", false);
+mongoose.set("strictPopulate", false);
 
 const connectDB = require("./config/db");
 connectDB();
